@@ -15,12 +15,16 @@ export default function App() {
     }
 
     const response = await axios.get(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${searchAsset}&apikey=${API_KEY}`);
+    const { status, statusText } = response;
+    console.log(response);
 
-    const { bestMatches } = response.data;
-    const filteredBestMatches = bestMatches.filter((match, index) => index < 3);
-    setBestMatches(filteredBestMatches);
-
-    console.log(filteredBestMatches);
+    if(status === 200 && statusText === 'OK') {
+      const { bestMatches } = response.data;
+      if(bestMatches && bestMatches.length > 0) {
+        const filteredBestMatches = bestMatches.filter((match, index) => index < 3);
+        setBestMatches(filteredBestMatches);
+      }  
+    }
   }
 
   return (
